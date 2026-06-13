@@ -303,31 +303,44 @@ Jalankan lebih dari satu client untuk simulasi multi-user.
 
 ## Login Page
 
-(Tambahkan screenshot login)
+<img width="1637" height="877" alt="image" src="https://github.com/user-attachments/assets/14889db1-b3c1-4eb3-bd9e-e2475de83f0a" />
+
+<img width="1643" height="932" alt="image" src="https://github.com/user-attachments/assets/3594dd59-d61b-4d5b-9beb-f188e34a45dc" />
 
 ## Feed Page
 
-(Tambahkan screenshot feed)
+<img width="1620" height="1037" alt="image" src="https://github.com/user-attachments/assets/c0424795-c110-491d-8b84-537953aa7cba" />
+
 
 ## Like dan Comment
 
-(Tambahkan screenshot)
+<img width="1620" height="1043" alt="image" src="https://github.com/user-attachments/assets/6cfbbc15-f126-4d99-bd1d-61bc0a701d8e" />
+
 
 ## Online Users
 
-(Tambahkan screenshot)
+<img width="1620" height="1042" alt="image" src="https://github.com/user-attachments/assets/04e372a3-1211-489b-9f6d-3bc4810ef8e7" />
+
 
 ## Direct Message
 
-(Tambahkan screenshot)
+<img width="1703" height="1042" alt="image" src="https://github.com/user-attachments/assets/8f79a570-001f-4c84-abc8-19bccb4f71cb" />
+
 
 ## Notifikasi Pesan Baru
 
-(Tambahkan screenshot)
+<img width="1655" height="722" alt="Screenshot 2026-06-13 141545" src="https://github.com/user-attachments/assets/77527011-cbd1-4203-a044-1c9315e252f9" />
+
+<img width="1637" height="735" alt="Screenshot 2026-06-13 141651" src="https://github.com/user-attachments/assets/526c151a-d1ad-4c92-8efc-d8920384cbbb" />
+
 
 ## File Transfer
 
-(Tambahkan screenshot)
+<img width="1735" height="767" alt="Screenshot 2026-06-13 141826" src="https://github.com/user-attachments/assets/83808fe5-e18f-4d4b-bfb9-d89c0325a4cb" />
+<img width="1635" height="737" alt="Screenshot 2026-06-13 141835" src="https://github.com/user-attachments/assets/364d5b4b-1f54-475a-819c-d4cd82b138d5" />
+<img width="810" height="726" alt="Screenshot 2026-06-13 141859" src="https://github.com/user-attachments/assets/5dd62eee-55e4-4245-9a94-296efa2ebc47" />
+<img width="1157" height="727" alt="Screenshot 2026-06-13 141938" src="https://github.com/user-attachments/assets/b1283017-0bd2-4d39-9c51-bc9c0ba99efe" />
+
 
 ---
 

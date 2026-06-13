@@ -6,7 +6,7 @@
 | Nama | NRP | Kelas |
 |--------|--------|--------|
 | Rafael Wiratama | 5025241196 | C |
-|  |  |  |
+| Denzel Daniels | 5025241228 | C |
 
 ---
 

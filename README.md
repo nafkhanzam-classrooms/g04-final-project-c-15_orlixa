@@ -44,6 +44,8 @@ Aplikasi menggunakan protokol TCP sehingga banyak client dapat terhubung ke serv
 - Melihat seluruh postingan
 - Like / Unlike postingan
 - Komentar pada postingan
+- Membuat postingan foto
+- Menampilkan daftar komentar langsung di bawah setiap postingan
 
 ### User Interaction
 
@@ -66,27 +68,27 @@ Aplikasi menggunakan protokol TCP sehingga banyak client dapat terhubung ke serv
 # Arsitektur Sistem
 
 ```text
-+-------------+
-|   Client A  |
-+-------------+
-       |
-       |
-       | TCP Socket
-       |
-+------------------+
-|     Server       |
-+------------------+
-       |
-       |
-       v
-+------------------+
-| SQLite Database  |
-+------------------+
-       ^
-       |
-+-------------+
-|   Client B  |
-+-------------+
++----------------+          TCP Socket          +-------------------------+
+|   Client A     | <--------------------------> |                         |
+| Tkinter GUI    |                              |                         |
++----------------+                              |                         |
+                                                |                         |
++----------------+          TCP Socket          |      Orlixa Server      |
+|   Client B     | <--------------------------> |   Multithreaded TCP     |
+| Tkinter GUI    |                              |                         |
++----------------+                              |                         |
+                                                |                         |
++----------------+          TCP Socket          |                         |
+|   Client C     | <--------------------------> |                         |
+| Tkinter GUI    |                              +-----------+-------------+
++----------------+                                          |
+                                                          |
+                                                          v
+                                      +------------------------------------+
+                                      | SQLite Database + Upload Storage   |
+                                      | database/orlixa.db                 |
+                                      | uploads/                           |
+                                      +------------------------------------+
 ```
 
 Server menangani seluruh request dari client menggunakan multithreading sehingga beberapa user dapat menggunakan aplikasi secara bersamaan.
@@ -97,21 +99,18 @@ Server menangani seluruh request dari client menggunakan multithreading sehingga
 
 ```text
 FP_Progjar_Orlixa
-│
 ├── client
 │   ├── __init__.py
 │   ├── chat_window.py
 │   ├── client.py
 │   ├── feed_page.py
 │   ├── gui.py
-│   └── login_page.py
-│
+│   ├── login_page.py
+│   └── room_window.py
 ├── database
-│   └── orlixa.db
-│
+│   └── .gitkeep
 ├── logs
-│   └── server.log
-│
+│   └── .gitkeep
 ├── server
 │   ├── __init__.py
 │   ├── auth_manager.py
@@ -119,17 +118,28 @@ FP_Progjar_Orlixa
 │   ├── feed_manager.py
 │   ├── logger.py
 │   ├── protocol.py
+│   ├── private_manager.py
+│   ├── request_router.py
+│   ├── room_manager.py
 │   └── server.py
-│
 ├── shared
 │   ├── __init__.py
 │   └── constants.py
-│
 ├── uploads
-│   ├── image (1).jpg
-│   └── file hasil transfer lainnya
-│
+│   └── .gitkeep
+├── README.md
 └── requirements.txt
+```
+
+Saat program berjalan, folder tambahan dapat terbentuk otomatis:
+
+```text
+uploads
+├── posts
+│   └── foto_post_yang_diupload
+└── rooms
+    └── <room_id>
+        └── gambar_room_yang_diupload
 ```
 
 ---
@@ -152,23 +162,31 @@ Berfungsi untuk:
 
 File utama:
 
+## Client
+
 | File | Fungsi |
-|--------|--------|
-| client.py | Komunikasi socket client |
-| login_page.py | Halaman login dan register |
-| feed_page.py | Feed sosial media |
-| chat_window.py | Direct Message dan File Transfer |
-| gui.py | Entry point aplikasi |
+|---|---|
+| `client/gui.py` | Entry point aplikasi client. |
+| `client/login_page.py` | Menampilkan halaman login dan register. |
+| `client/client.py` | Mengatur komunikasi socket dari client ke server. |
+| `client/feed_page.py` | Menampilkan feed, post foto, like, komentar, online user, dan daftar room. |
+| `client/chat_window.py` | Menampilkan direct message dan file transfer private. |
+| `client/room_window.py` | Menampilkan room chat, daftar member room, pesan room, dan gambar room. |
 
 ---
 
 ## Server
 
-Folder:
+| File | Fungsi |
+|---|---|
+| `server/server.py` | Server utama, menerima koneksi client, membuat thread, dan melakukan routing request berdasarkan action. |
+| `server/auth_manager.py` | Mengelola register dan login. |
+| `server/feed_manager.py` | Mengelola post, post foto, like, komentar, dan pengambilan feed. |
+| `server/room_manager.py` | Mengelola pembuatan room, join room, leave room, pesan room, user room, dan file/gambar room. |
+| `server/database.py` | Membuat database, membuat tabel, dan menjalankan migrasi kolom foto pada tabel posts. |
+| `server/protocol.py` | Mengatur pengiriman dan penerimaan packet JSON dengan header ukuran payload. |
+| `server/logger.py` | Mencatat aktivitas server ke file log. |
 
-```text
-server/
-```
 
 Berfungsi untuk:
 
@@ -283,20 +301,31 @@ Jalankan lebih dari satu client untuk simulasi multi-user.
 
 # Skenario Pengujian
 
-| No | Pengujian | Hasil |
-|----|-----------|--------|
-| 1 | Register User | Berhasil |
-| 2 | Login User | Berhasil |
-| 3 | Create Post | Berhasil |
-| 4 | Like Post | Berhasil |
-| 5 | Unlike Post | Berhasil |
-| 6 | Comment Post | Berhasil |
-| 7 | Online Users | Berhasil |
-| 8 | Direct Message | Berhasil |
-| 9 | Auto Refresh Chat | Berhasil |
-| 10 | Notifikasi Pesan Baru | Berhasil |
-| 11 | File Transfer | Berhasil |
-| 12 | Multi Client | Berhasil |
+| No | Pengujian | Langkah Singkat | Hasil yang Diharapkan |
+|---:|---|---|---|
+| 1 | Register user | User mengisi username dan password | Akun berhasil dibuat |
+| 2 | Login user | User login dengan akun valid | User masuk ke aplikasi |
+| 3 | Online user list | Dua client login bersamaan | User online tampil pada daftar |
+| 4 | Create post teks | User membuat post berisi teks | Post tampil di feed |
+| 5 | Create post foto | User memilih foto lalu membuat post | Foto tampil di feed |
+| 6 | Create post teks + foto | User mengisi teks dan memilih foto | Teks dan foto tampil pada post yang sama |
+| 7 | Validasi post kosong | User membuat post tanpa teks dan foto | Sistem menolak post kosong |
+| 8 | Validasi format foto | User memilih file bukan gambar | Sistem menampilkan error format tidak didukung |
+| 9 | Like post | User menekan tombol Like | Jumlah like bertambah |
+| 10 | Unlike post | User menekan tombol Unlike | Jumlah like berkurang |
+| 11 | Comment post | User mengisi komentar | Komentar tersimpan dan tampil di bawah post |
+| 12 | Komentar kosong | User mengirim komentar kosong | Sistem menolak komentar kosong |
+| 13 | Create room | User membuat room baru | Room tampil pada daftar room |
+| 14 | Join room | User memilih room | Jendela room terbuka |
+| 15 | Send room message | User mengirim pesan room | Pesan tampil pada room chat |
+| 16 | Room users | Beberapa user join room | Daftar member room tampil |
+| 17 | Send image to room | User mengirim gambar di room | Gambar tampil sebagai preview room |
+| 18 | Open latest image | User menekan Open Latest Image | Gambar terbaru terbuka |
+| 19 | Leave room | User keluar dari room | User tidak lagi menjadi member room |
+| 20 | Direct message | User mengirim pesan private | Pesan masuk ke riwayat percakapan |
+| 21 | File transfer private | User mengirim file ke user lain | Metadata file tersimpan dan pesan file tampil |
+| 22 | Multi client | Beberapa client aktif bersamaan | Server tetap dapat melayani banyak client |
+| 23 | Server logging | Aplikasi digunakan | Aktivitas tercatat di `logs/server.log` |
 
 ---
 

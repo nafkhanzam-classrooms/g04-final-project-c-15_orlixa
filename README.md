@@ -16,7 +16,7 @@
 Link video demo:
 
 ```text
-https://youtube.com/.....
+https://youtu.be/rz7HCvm1gGA
 ```
 
 ---

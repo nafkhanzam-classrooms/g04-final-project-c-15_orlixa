@@ -4,15 +4,13 @@ from shared.constants import HEADER_SIZE
 
 def send_packet(conn, data):
     payload = json.dumps(data).encode()
-
     header = str(len(payload)).zfill(HEADER_SIZE).encode()
-
     conn.sendall(header)
     conn.sendall(payload)
 
 
 def recv_exact(conn, size):
-    data = b''
+    data = b""
 
     while len(data) < size:
         chunk = conn.recv(size - len(data))
@@ -32,7 +30,6 @@ def recv_packet(conn):
         return None
 
     length = int(header.decode())
-
     payload = recv_exact(conn, length)
 
     if not payload:
